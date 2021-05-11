@@ -1,6 +1,6 @@
 package com.example.imagefromweb
 
-import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,12 +22,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun downloadImage(view: View) {
+
         var btnToLoadImage: Button = findViewById(R.id.btnToLoadImage)
         var etUrlInputArea: EditText = findViewById(R.id.etUrlInputArea)
         var ivImageFromInternet: ImageView = findViewById(R.id.ivImageFromInternet)
         var urlFromEditTextView : String = etUrlInputArea.text.toString()
         Glide.with(this)
                 .load(urlFromEditTextView)
+                .listener(
+                        object : RequestListener<Drawable> {
+                            override fun onLoadFailed(p0: GlideException?, p1: Any?, target: Target<Drawable>?, p3: Boolean): Boolean {
+                                Toast.makeText(applicationContext, p0.toString(), Toast.LENGTH_SHORT).show()
+                                return true
+                            }
+                            override fun onResourceReady(p0: Drawable?, p1: Any?, target: Target<Drawable>?, p3: DataSource?, p4: Boolean): Boolean {
+                                return false
+                            }
+                        }
+                )
                 .centerInside()
                 .into(ivImageFromInternet)
         etUrlInputArea.setText("")
